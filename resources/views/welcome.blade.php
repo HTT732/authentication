@@ -14,7 +14,8 @@
                 <p class="text-success">{{ session('message') }}</p>
             @endif
             <div class="col-md-12 mx-auto text-center">
-                <a href="{{ route('get-login') }}" class="btn btn-danger mt-3"><strong>Login</strong></a>
+                <a href="{{ route('show-login-form') }}" class="btn btn-danger mt-3 mx-2"><strong>Login</strong></a>
+                <a href="{{ route('show-register-form') }}" class="btn btn-warning mt-3 mx-2"><strong>Register</strong></a>
             </div>
         </form>
     @endif

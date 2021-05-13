@@ -16,6 +16,8 @@
 
     <input type="text" name="email" placeholder="Email" value="{{old('email')}}">
     <input type="password" name="password" placeholder="Password">
+    <a class="forgot text-muted" href="{{ route('show-register-form') }}">Register</a>
+    <br>
     <a class="forgot text-muted" href="{{ route('get-forgot-password') }}">Forgot password?</a>
     <input type="submit" name="" value="Login">
 </form>

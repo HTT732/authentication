@@ -10,7 +10,18 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57664d37-91ef-44e4-a612-637bb094b53c" name="Default Changelist" comment="" />
+    <list default="true" id="57664d37-91ef-44e4-a612-637bb094b53c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ForgotPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ForgotPasswordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LoginController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ResetPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ResetPasswordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repositories/AuthRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/AuthRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/login.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/login.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/welcome.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -185,7 +196,7 @@
       <updated>1620701184006</updated>
       <workItem from="1620701185262" duration="23404000" />
       <workItem from="1620730740915" duration="169000" />
-      <workItem from="1620869831259" duration="24353000" />
+      <workItem from="1620869831259" duration="27158000" />
     </task>
     <servers />
   </component>
@@ -208,10 +219,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="240" y="0" width="1421" height="1035" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1620881612194" />
-    <state x="693" y="277" width="524" height="479" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1620888019336">
+    <state x="693" y="277" width="524" height="479" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1620902436324">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="693" y="277" width="524" height="479" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1620888019336" />
+    <state x="693" y="277" width="524" height="479" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1620902436324" />
     <state x="464" y="154" key="SettingsEditor" timestamp="1620716041611">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

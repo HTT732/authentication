@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
+use DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +22,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('login', [LoginController::class, 'getLogin'])->name('get-login');
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('show-login-form');
 Route::post('login', [LoginController::class, 'login'])->name('login');
+Route::get('register', [RegisterController::class, 'showRegisterForm'])->name('show-register-form');
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('forgot-password', [ForgotPasswordController::class, 'getEmail'])->name('get-forgot-password');
 Route::post('forgot-password', [ForgotPasswordController::class, 'postEmail'])->name('post-forgot-password');

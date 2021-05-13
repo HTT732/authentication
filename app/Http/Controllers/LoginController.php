@@ -25,7 +25,7 @@ class LoginController extends Controller
         $this->authRepo = $authRepository;
     }
 
-    public function getLogin() {
+    public function showLoginForm() {
         return view('auth.login');
     }
 

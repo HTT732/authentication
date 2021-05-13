@@ -133,4 +133,20 @@ class AuthRepository extends RepositoryAbstract
     public function deleteTokenEmail($email) {
         DB::table('password_resets')->where('email', $email)->delete();
     }
+
+    /**
+     * Register use
+     *
+     * @param  $request
+     * @return void
+     */
+    public function register($request) {
+        $exists = $this->checkEmailExists($request->mail);
+        $create_at = Carbon::now();
+        $update_at = Carbon::now();
+
+        if (!$exists) {
+            $this->model->create(request(['name', 'email', 'password']), $create_at, $update_at);
+        }
+    }
 }
