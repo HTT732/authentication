@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class SendMailResetPassword extends Mailable
+class VerifyEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,8 +30,8 @@ class SendMailResetPassword extends Mailable
     public function build()
     {
         return $this->from('admin@admin.com')
-                    ->view('auth.password.verify-password')
-                    ->with($this->details['token'])
-                    ->subject('Notification reset password');
+                    ->view('auth.password.verify-email')
+                    ->with(['url' => $this->details['url']])
+                    ->subject('Email verification');
     }
 }

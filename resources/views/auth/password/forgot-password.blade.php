@@ -4,7 +4,14 @@
     <form class="box" method="post" action="{{ route('post-forgot-password') }}">
         @csrf
         @if(session('message'))
-            <p class="text-primary">{{session('message')}}</p>
+            <p class="text-success">{{session('message')}}</p>
+            <p class="text-muted">
+                If you do not receive the link,
+                <a href="{{ route('get-forgot-password') }}" class="text-muted">
+                    <strong>click to resend</strong>
+                </a>
+            </p>
+            <a href="{{ route('show-login-form') }}" class="btn btn-danger mt-3 mx-2"><strong>Login</strong></a>
         @else
             <h1>Forgot password</h1>
             @if(count($errors) > 0)

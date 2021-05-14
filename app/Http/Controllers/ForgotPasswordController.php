@@ -44,7 +44,7 @@ class ForgotPasswordController extends Controller
         $this->authRepo->insertEmailAndToken($request, $token);
 
         // Send mail
-        $this->authRepo->sendMailResetPassword($request, ['email' => $request->email, 'token' => $token]);
+        $this->authRepo->sendMailResetPassword($request, ['token' => $token]);
 
         return back()->with('message', 'We have e-mailed your password reset link !');
     }

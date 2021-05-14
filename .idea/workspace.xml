@@ -12,14 +12,17 @@
   <component name="ChangeListManager">
     <list default="true" id="57664d37-91ef-44e4-a612-637bb094b53c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ForgotPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ForgotPasswordController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ResetPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ResetPasswordController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RegisterController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/RegisterRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/RegisterRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Mail/SendMailResetPassword.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Mail/SendMailResetPassword.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Repositories/AuthRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/AuthRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/auth/login.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/login.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/welcome.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/password/forgot-password.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/password/forgot-password.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/password/reset-password.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/password/reset-password.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/password/verify.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/password/verify-email.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/register.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/register.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -158,7 +161,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -169,13 +172,14 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/resources/views/auth/password" />
       <recent name="$PROJECT_DIR$/resources/views/auth" />
       <recent name="$PROJECT_DIR$/app/Http/Controllers/Auth" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app" />
+      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunManager">
@@ -196,7 +200,8 @@
       <updated>1620701184006</updated>
       <workItem from="1620701185262" duration="23404000" />
       <workItem from="1620730740915" duration="169000" />
-      <workItem from="1620869831259" duration="27158000" />
+      <workItem from="1620869831259" duration="27240000" />
+      <workItem from="1620955768574" duration="22282000" />
     </task>
     <servers />
   </component>
@@ -213,16 +218,21 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="240" y="0" width="1421" height="1035" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1620881612194">
+    <state x="240" y="0" width="1421" height="1035" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1620986253327">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="240" y="0" width="1421" height="1035" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1620881612194" />
+    <state x="240" y="0" width="1421" height="1035" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1620986253327" />
     <state x="693" y="277" width="524" height="479" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1620902436324">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="693" y="277" width="524" height="479" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1620902436324" />
+    <state x="625" y="153" width="660" height="727" key="#phpunit.xml" timestamp="1620979501508">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="625" y="153" width="660" height="727" key="#phpunit.xml/0.0.1920.1040@0.0.1920.1040" timestamp="1620979501508" />
     <state x="464" y="154" key="SettingsEditor" timestamp="1620716041611">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -239,9 +249,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="623" y="228" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1620891676817" />
-    <state x="685" y="359" width="540" height="315" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1620893822417">
+    <state x="685" y="359" width="540" height="315" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1620981711802">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="685" y="359" width="540" height="315" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1620893822417" />
+    <state x="685" y="359" width="540" height="315" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1620981711802" />
   </component>
 </project>

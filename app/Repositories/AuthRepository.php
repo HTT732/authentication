@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Jobs\SendMail;
+use App\Jobs\JobVerifyEmail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -73,7 +74,49 @@ class AuthRepository extends RepositoryAbstract
             "email"=>$request->email,
             "token"=>$token,
         ];
+
         dispatch(new SendMail($details));
+    }
+
+    /**
+     * Send mail reset password
+     *
+     * Param Token $token
+     * @return boolean
+     */
+    public function verifyMailResgiter($email, $token) {
+        $url = route('verify-email', ['token' => $token]);
+
+        $details = [
+            'email' => $email,
+            'url' => $url
+        ];
+
+        dispatch(new JobVerifyEmail($details));
+    }
+
+    /**
+     * Active user if verified email
+     *
+     * Param Token $token
+     * @return boolean
+     */
+    public function activeUser($email) {
+        $row = $this->model->where('email', $email)->first();
+
+        if ($row->email_verified_at == null) {
+            $now = Carbon::now();
+            $seconds = $now->diffInSeconds($row->created_at);
+
+            if ($seconds < 600) {
+                $this->model->where('email', $email)
+                    ->update(['email_verified_at' => $now]);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
@@ -142,11 +185,18 @@ class AuthRepository extends RepositoryAbstract
      */
     public function register($request) {
         $exists = $this->checkEmailExists($request->mail);
-        $create_at = Carbon::now();
-        $update_at = Carbon::now();
+        $created_at = Carbon::now();
+        $updated_at = Carbon::now();
 
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'created_at' => $created_at,
+            'updated_at' => $updated_at
+        ];
         if (!$exists) {
-            $this->model->create(request(['name', 'email', 'password']), $create_at, $update_at);
+            return $this->model->create($data);
         }
     }
 }
