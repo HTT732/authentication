@@ -31,7 +31,7 @@ class VerifyEmail extends Mailable
     {
         return $this->from('admin@admin.com')
                     ->view('auth.password.verify-email')
-                    ->with(['url' => $this->details['url']])
+                    ->with(['url' => $this->details['url'], 'expire' => $this->details['expire']])
                     ->subject('Email verification');
     }
 }

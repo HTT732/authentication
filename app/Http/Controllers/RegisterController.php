@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ForgotPasswordRequest;
 use App\Repositories\AuthRepository;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Str;
@@ -31,15 +32,10 @@ class RegisterController extends Controller
     }
 
     public function register(RegisterRequest $request) {
-        $register = $this->authRepo->register($request);
+        $token = Str::random(64);
+        $register = $this->authRepo->register($request, $token);
 
         if($register) {
-            $token = Str::random(64);
-
-            // Add data in session
-            session()->put('email', $request->email);
-            session()->put('token', $request->token);
-
             // Verify email
             $this->authRepo->verifyMailResgiter($request->email, $token);
 
@@ -49,14 +45,41 @@ class RegisterController extends Controller
     }
 
     public function verifyRegister($token) {
-        $email = session('email');
+        $status = $this->authRepo->activeUser($token);
 
-        $status = $this->authRepo->activeUser($email);
-
-        if ($status) {
-            return redirect('/login')->with('message', 'Account confirmation successful!');
-        } else {
-            return redirect('/login')->withErrors('Validation time has expired, get authentication link');
+        if ($status == false) {
+            return redirect('/login')->with('expire', 'Validation time has expired.');
         }
+
+        if ($status == 'verified') {
+            return redirect('/login')->with('verify-fail', 'Your email has been verified.!');
+        }
+
+        if ($status == 'error') {
+            return redirect('/login')->with('verify-fail', 'Verify error!');
+        }
+
+        return redirect('/login')->with('message', 'Your email has been verified.!');
+    }
+
+    public function showResendForm() {
+        return view('auth.password.resend-verify-mail');
+    }
+
+    public function resendMailVerify(ForgotPasswordRequest $request) {
+        $token = Str::random(64);
+
+        // update token to users
+        $update = $this->authRepo->updateToken($request->email, $token);
+        $mess = ['verify-fail' => 'Resend mail faild.'];
+
+        if (!$update) {
+            return redirect('/resend-email')->withErrors('verify-fail', 'Resend mail faild.');
+        }
+
+        // Verify email
+        $this->authRepo->verifyMailResgiter($request->email, $token);
+
+        return redirect('/login')->with(['message' => 'A link has been sent to your mailbox, open your mailbox to confirm your account.']);
     }
 }

@@ -5,7 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +17,8 @@ use App\Http\Controllers\ResetPasswordController;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
+    dd(Cookie::get('remember_token'));
     return view('welcome');
 })->name('home');
 
@@ -31,3 +32,5 @@ Route::post('forgot-password', [ForgotPasswordController::class, 'postEmail'])->
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'getPassword'])->name('get-password');
 Route::post('/reset-password', [ResetPasswordController::class, 'updatePassword'])->name('update-password');
 Route::get('/verify-email/{token}', [RegisterController::class, 'verifyRegister'])->name('verify-email');
+Route::get('/resend', [RegisterController::class, 'showResendForm'])->name('resend-email');
+Route::post('/resend', [RegisterController::class, 'resendMailVerify'])->name('post-resend-email');

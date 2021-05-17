@@ -9,6 +9,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Config;
+use phpDocumentor\Reflection\Types\Collection;
+use Illuminate\Http\Response;
 
 /**
  * Class AuthRepository
@@ -89,7 +92,8 @@ class AuthRepository extends RepositoryAbstract
 
         $details = [
             'email' => $email,
-            'url' => $url
+            'url' => $url,
+            'expire' => Config::get('constants.expire')
         ];
 
         dispatch(new JobVerifyEmail($details));
@@ -101,22 +105,53 @@ class AuthRepository extends RepositoryAbstract
      * Param Token $token
      * @return boolean
      */
-    public function activeUser($email) {
-        $row = $this->model->where('email', $email)->first();
+    public function activeUser($token) {
+        $row = $this->model->where('token', $token)->first();
 
-        if ($row->email_verified_at == null) {
+        if (!$row) {
+            return 'error';
+        }
+
+        if (empty($row->email_verified_at)) {
             $now = Carbon::now();
-            $seconds = $now->diffInSeconds($row->created_at);
+            $expire = Config::get('constants.expire');
 
-            if ($seconds < 600) {
-                $this->model->where('email', $email)
+            $minute = $now->diffInMinutes($row->updated_at);
+            if ($minute < $expire) {
+                $this->model->where('email', $row->email)
                     ->update(['email_verified_at' => $now]);
                 return true;
             } else {
                 return false;
             }
+        } else {
+            return 'verified';
         }
-        return false;
+    }
+
+    /**
+     * Remember login
+     *
+     * Param null
+     * @return void
+     */
+    public function rememberLogin($request) {
+        $token = Str::random(64);
+
+        $this->model->where('email', $request->email)
+                    ->update(['remember_token' => $token]);
+
+        // create cookie remember
+        setcookie("remember_token", $token, (time()+3600)*24*365);
+
+        // create session data use
+        $user = $this->getData($request->email);
+
+        if ($user) {
+            session()->put('email', $user->email);
+            session()->put('login', true);
+        }
+
     }
 
     /**
@@ -157,6 +192,30 @@ class AuthRepository extends RepositoryAbstract
     }
 
     /**
+     * Get data from users by email
+     *
+     * @param  string  $token
+     * @return string
+     */
+    public function getData($email) {
+        $result = $this->model->where('email', $email)->first();
+
+        return $result;
+    }
+
+    /**
+     * Update token
+     *
+     * @param  string  $token
+     * @return Collection
+     */
+    function updateToken($email, $token) {
+        $update = $this->model->where('email', $email)
+                    ->update(['token' => $token]);
+        return $update;
+    }
+
+    /**
      * Check email exists by token
      *
      * @param  string  $email
@@ -183,7 +242,7 @@ class AuthRepository extends RepositoryAbstract
      * @param  $request
      * @return void
      */
-    public function register($request) {
+    public function register($request, $token) {
         $exists = $this->checkEmailExists($request->mail);
         $created_at = Carbon::now();
         $updated_at = Carbon::now();
@@ -191,6 +250,7 @@ class AuthRepository extends RepositoryAbstract
         $data = [
             'name' => $request->name,
             'email' => $request->email,
+            'token' => $token,
             'password' => bcrypt($request->password),
             'created_at' => $created_at,
             'updated_at' => $updated_at

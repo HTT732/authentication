@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'token',
         'created_at',
         'update_at'
     ];

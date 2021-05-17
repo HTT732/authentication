@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\AuthRepository;
 use App\Http\Requests\LoginRequest;
+use Cookie;
 
 class LoginController extends Controller
 {
@@ -34,6 +35,11 @@ class LoginController extends Controller
         $login = $this->authRepo->login($request);
 
         if ($login) {
+            // remember login
+            if ($request->has('remember')) {
+                $this->authRepo->rememberLogin($request);
+            }
+
             return redirect('/');
         } else {
             return redirect('/login')->withErrors('Incorrect password or email!');
