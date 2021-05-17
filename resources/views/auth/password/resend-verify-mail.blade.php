@@ -1,7 +1,7 @@
 @extends('auth.template')
 @section('title', 'Resend Link')
 @section('content')
-    <form class="box" method="post" action="{{ route('post-resend-email') }}">
+    <form class="box" method="post" action="{{ route('resend.store') }}">
         @csrf
         <h1>Resend link</h1>
         @if(count($errors) > 0)

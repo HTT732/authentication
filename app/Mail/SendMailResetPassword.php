@@ -31,7 +31,7 @@ class SendMailResetPassword extends Mailable
     {
         return $this->from('admin@admin.com')
                     ->view('auth.password.verify-password')
-                    ->with($this->details['token'])
+                    ->with(['token' => $this->details['token'], 'url' => $this->details['url']])
                     ->subject('Notification reset password');
     }
 }

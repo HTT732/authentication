@@ -28,12 +28,12 @@ class ResetPasswordController extends Controller
         $this->authRepo = $authRepository;
     }
 
-    public function getPassword($token)
+    public function show($token)
     {
         return view('auth.password.reset-password', ['token' => $token]);
     }
 
-    public function updatePassword(ResetPasswordRequest $request)
+    public function store(ResetPasswordRequest $request)
     {
         $email = $this->authRepo->getEmailByToken($request->token);
         $checkMail = $this->authRepo->checkEmailExists($email);
@@ -44,6 +44,8 @@ class ResetPasswordController extends Controller
 
             // Delete token and email
             $this->authRepo->deleteTokenEmail($email);
+        } else {
+            return back()->withErrors('Reset password failed!');
         }
 
         return redirect('/')->with('message', 'Your password has been changed!');

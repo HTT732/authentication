@@ -27,11 +27,11 @@ class RegisterController extends Controller
         $this->authRepo = $authRepository;
     }
 
-    public function showRegisterForm() {
+    public function index() {
         return view('auth.register');
     }
 
-    public function register(RegisterRequest $request) {
+    public function store(RegisterRequest $request) {
         $token = Str::random(64);
         $register = $this->authRepo->register($request, $token);
 
@@ -62,24 +62,5 @@ class RegisterController extends Controller
         return redirect('/login')->with('message', 'Your email has been verified.!');
     }
 
-    public function showResendForm() {
-        return view('auth.password.resend-verify-mail');
-    }
-
-    public function resendMailVerify(ForgotPasswordRequest $request) {
-        $token = Str::random(64);
-
-        // update token to users
-        $update = $this->authRepo->updateToken($request->email, $token);
-        $mess = ['verify-fail' => 'Resend mail faild.'];
-
-        if (!$update) {
-            return redirect('/resend-email')->withErrors('verify-fail', 'Resend mail faild.');
-        }
-
-        // Verify email
-        $this->authRepo->verifyMailResgiter($request->email, $token);
-
-        return redirect('/login')->with(['message' => 'A link has been sent to your mailbox, open your mailbox to confirm your account.']);
-    }
+    
 }

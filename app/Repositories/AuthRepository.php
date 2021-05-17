@@ -42,6 +42,11 @@ class AuthRepository extends RepositoryAbstract
         $password = $request->password;
 
         $user = $this->model->where('email', $email)->first();
+        $active = $user->email_verified_at;
+
+        if (!$active) {
+            return 'inactive';
+        }
 
         if ($user) {
             $pass = password_verify($password, $user->password);
@@ -50,8 +55,9 @@ class AuthRepository extends RepositoryAbstract
         if ($user && $pass) {
             session()->put('login', true);
             session()->put('user_id', $user->id);
+            session()->put('name', $user->name);
 
-            return true;
+            return 'success';
         }
         return false;
     }
@@ -73,9 +79,12 @@ class AuthRepository extends RepositoryAbstract
      * @return boolean
      */
     public function sendMailResetPassword($request, $token) {
+        $url = route('reset-password.show', ['reset_password' => $token]);
+
         $details=[
-            "email"=>$request->email,
-            "token"=>$token,
+            "email" => $request->email,
+            "token" => $token,
+            "url" => $url
         ];
 
         dispatch(new SendMail($details));
@@ -120,7 +129,7 @@ class AuthRepository extends RepositoryAbstract
             if ($minute < $expire) {
                 $this->model->where('email', $row->email)
                     ->update(['email_verified_at' => $now]);
-                return true;
+                return 'success';
             } else {
                 return false;
             }
@@ -142,16 +151,29 @@ class AuthRepository extends RepositoryAbstract
                     ->update(['remember_token' => $token]);
 
         // create cookie remember
-        setcookie("remember_token", $token, (time()+3600)*24*365);
+        setcookie("remember_token", $token, (time()+3600*24*365));
+    }
 
-        // create session data use
-        $user = $this->getData($request->email);
+    /**
+     * Forget login
+     *
+     * Param null
+     * @return void
+     */
+    public function forgetLogin() {
+        $email = session('email');
+        if (session('login') && $email) {
+            $this->model->where('email', $email)
+                        ->update(['remember_token' => null]);
+            
+            // delete cookie 
+            setcookie('remember_token', '', time()-3600);
 
-        if ($user) {
-            session()->put('email', $user->email);
-            session()->put('login', true);
+            // delete session
+            session()->forget('login');
+            session()->forget('email');
+            session()->forget('name');
         }
-
     }
 
     /**

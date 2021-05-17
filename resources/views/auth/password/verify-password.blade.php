@@ -4,7 +4,7 @@
 </head>
 <body>
 <div>
-    <a href="http://localhost:8089/reset-password/{{$token}}">Click here</a>
+    <a href="{{$url}}">Click here</a>
     to reset your password!
 </div>
 </body>

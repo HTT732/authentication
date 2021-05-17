@@ -1,7 +1,7 @@
 @extends('auth.template')
 @section('title', 'Login')
 @section('content')
-<form class="box" method="post" action="{{ route('login') }}">
+<form class="box" method="post" action="{{ route('login.store') }}">
     @csrf
     <h1>Login</h1>
     @if (count($errors) > 0)
@@ -11,7 +11,10 @@
     @elseif(session('message'))
         <p class="text-success">{{ session('message') }}</p>
     @elseif(session('expire'))
-        <p class="text-danger"> {{ session('expire') }} <a href="{{ route('resend-email') }}">click to resend</a></p>
+        <p class="text-danger"> {{ session('expire') }} <a href="{{ route('resend.index') }}">click to resend</a></p>
+    @elseif(session('not-found-link'))
+        <p class="text-danger" >{{session('not-found-link')}}</p>
+        <p class="text-danger">If you don't have the link yet, <a href="{{ route('resend.index') }}">click to resend</a></p>
     @elseif(session('verify-fail'))
         <p class="text-danger"> {{session('verify-fail')}} </p>
     @else
@@ -25,7 +28,7 @@
         <label class="form-check-label text-secondary" for="remember">Remember me</label>
     </div>
     <input type="submit" name="" value="Login">
-    <a class="text-muted mr-4" href="{{ route('get-forgot-password') }}">Forgot password?</a>
-    <a class="text-muted ml-4" href="{{ route('show-register-form') }}">Register</a>
+    <a class="text-muted mr-4" href="{{ route('forgot-password.index') }}">Forgot password?</a>
+    <a class="text-muted ml-4" href="{{ route('register.index') }}">Register</a>
 </form>
 @endsection

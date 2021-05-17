@@ -1,7 +1,7 @@
 @extends('auth.template')
 @section('title', 'Register')
 @section('content')
-    <form class="box" method="post" action="{{ route('register') }}">
+    <form class="box" method="post" action="{{ route('register.store') }}">
         @csrf
         <h1>Register</h1>
         @if (count($errors) > 0)
@@ -17,6 +17,6 @@
         <input type="password" name="password" placeholder="Password">
         <input type="password" name="password_confirmation" placeholder="Confirm password">
         <input type="submit" name="" value="Register">
-        <p class="text-muted">Already have an account <a class="text-muted" href="{{ route('show-login-form') }}"><strong>Login</strong></a></p>
+        <p class="text-muted">Already have an account <a class="text-muted" href="{{ route('login.index') }}"><strong>Login</strong></a></p>
     </form>
 @endsection

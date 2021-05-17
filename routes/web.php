@@ -5,6 +5,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\ResendMailController;
+use App\Http\Middleware\CheckRememberLogin;
 use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
@@ -18,19 +20,16 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function (Request $request) {
-    dd(Cookie::get('remember_token'));
     return view('welcome');
 })->name('home');
 
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('show-login-form');
-Route::post('login', [LoginController::class, 'login'])->name('login');
-Route::get('register', [RegisterController::class, 'showRegisterForm'])->name('show-register-form');
-Route::post('register', [RegisterController::class, 'register'])->name('register');
+Route::middleware('verify.login')->group(function () {
+    Route::resource('login', LoginController::class)->only(['index', 'store']);
+    Route::resource('register', RegisterController::class)->only(['index', 'store']);
+    Route::resource('forgot-password', ForgotPasswordController::class)->only(['index', 'store']);
+    Route::resource('reset-password', ResetPasswordController::class)->only(['show', 'store']);
+    Route::resource('resend', ResendMailController::class)->only(['index', 'store']);
+    Route::get('/verify-email/{token}', [RegisterController::class, 'verifyRegister'])->name('verify-email');
+});
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('forgot-password', [ForgotPasswordController::class, 'getEmail'])->name('get-forgot-password');
-Route::post('forgot-password', [ForgotPasswordController::class, 'postEmail'])->name('post-forgot-password');
-Route::get('/reset-password/{token}', [ResetPasswordController::class, 'getPassword'])->name('get-password');
-Route::post('/reset-password', [ResetPasswordController::class, 'updatePassword'])->name('update-password');
-Route::get('/verify-email/{token}', [RegisterController::class, 'verifyRegister'])->name('verify-email');
-Route::get('/resend', [RegisterController::class, 'showResendForm'])->name('resend-email');
-Route::post('/resend', [RegisterController::class, 'resendMailVerify'])->name('post-resend-email');
+

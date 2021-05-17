@@ -1,17 +1,17 @@
 @extends('auth.template')
 @section('title', 'Forgot password')
 @section('content')
-    <form class="box" method="post" action="{{ route('post-forgot-password') }}">
+    <form class="box" method="post" action="{{ route('forgot-password.store') }}">
         @csrf
         @if(session('message'))
             <p class="text-success">{{session('message')}}</p>
             <p class="text-muted">
                 If you do not receive the link,
-                <a href="{{ route('get-forgot-password') }}" class="text-muted">
+                <a href="{{ route('forgot-password.index') }}" class="text-muted">
                     <strong>click to resend</strong>
                 </a>
             </p>
-            <a href="{{ route('show-login-form') }}" class="btn btn-danger mt-3 mx-2"><strong>Login</strong></a>
+            <a href="{{ route('login.index') }}" class="btn btn-danger mt-3 mx-2"><strong>Login</strong></a>
         @else
             <h1>Forgot password</h1>
             @if(count($errors) > 0)

@@ -31,12 +31,12 @@ class ForgotPasswordController extends Controller
         $this->authRepo = $authRepository;
     }
 
-    public function getEmail()
+    public function index()
     {
         return view('auth.password.forgot-password');
     }
 
-    public function postEmail(ForgotPasswordRequest $request)
+    public function store(ForgotPasswordRequest $request)
     {
         $token = Str::random(64);
 
@@ -44,7 +44,7 @@ class ForgotPasswordController extends Controller
         $this->authRepo->insertEmailAndToken($request, $token);
 
         // Send mail
-        $this->authRepo->sendMailResetPassword($request, ['token' => $token]);
+        $this->authRepo->sendMailResetPassword($request, $token);
 
         return back()->with('message', 'We have e-mailed your password reset link !');
     }

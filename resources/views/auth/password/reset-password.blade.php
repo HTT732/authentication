@@ -1,7 +1,7 @@
 @extends('auth.template')
 @section('title', 'Reset password')
 @section('content')
-    <form class="box" method="post" action="{{ route('update-password') }}">
+    <form class="box" method="post" action="{{ route('reset-password.store') }}">
         @csrf
         <h1>Reset password</h1>
         @if(!empty($errors))

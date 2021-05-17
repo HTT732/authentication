@@ -26,21 +26,25 @@ class LoginController extends Controller
         $this->authRepo = $authRepository;
     }
 
-    public function showLoginForm() {
+    public function index() {
         return view('auth.login');
     }
 
-    public function login(LoginRequest $request)
+    public function store(LoginRequest $request)
     {
         $login = $this->authRepo->login($request);
 
-        if ($login) {
+        if ($login == 'success') {
             // remember login
             if ($request->has('remember')) {
                 $this->authRepo->rememberLogin($request);
+            } else {
+
             }
 
             return redirect('/');
+        } else if ($login == 'inactive') {
+            return redirect('/login')->with('not-found-link', 'Please check your mailbox to activate your account.');
         } else {
             return redirect('/login')->withErrors('Incorrect password or email!');
         }
@@ -54,6 +58,9 @@ class LoginController extends Controller
      */
     public function logout()
     {
+        if (session('login')) {
+            $this->authRepo->forgetLogin();
+        }
         $this->authRepo->logout();
         return redirect('/');
     }
