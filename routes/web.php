@@ -6,7 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ResendMailController;
-use App\Http\Middleware\CheckRememberLogin;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +32,8 @@ Route::middleware('verify.login')->group(function () {
     Route::get('/verify-email/{token}', [RegisterController::class, 'verifyRegister'])->name('verify-email');
 });
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('user', UserController::class);
+});
 

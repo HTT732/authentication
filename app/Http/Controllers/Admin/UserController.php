@@ -1,11 +1,33 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Requests\UserRequest;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
-class Test extends Controller
+class UserController extends AdminController
 {
+    /**
+     * Global property or variable repository
+     *
+     * @var object
+     */
+    protected $userRepo;
+
+    /**
+     * Construct
+     *
+     * @param UserRepository $userRepository
+     * @return void
+     */
+    public function __construct(UserRepository $userRepository)
+    {
+        parent::__construct();
+        $this->userRepo = $userRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +35,10 @@ class Test extends Controller
      */
     public function index()
     {
-        //
+        $users = $this->userRepo->getAllRow();
+        $per_page = $this->limit;
+
+        return view('admin.user.index', compact('users', 'per_page'));
     }
 
     /**
@@ -23,7 +48,7 @@ class Test extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.user.create');
     }
 
     /**
@@ -32,9 +57,9 @@ class Test extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        dd('d');
     }
 
     /**
