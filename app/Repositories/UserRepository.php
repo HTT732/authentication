@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
 use phpDocumentor\Reflection\Types\Collection;
 use Illuminate\Http\Response;
+// use App\Http\Repositories\AuthRepository;
 
 /**
  * Class AuthRepository
@@ -37,6 +38,27 @@ class UserRepository extends RepositoryAbstract
      */
     public function getAllRow() {
         return $this->model->all();
+    }
+
+    /**
+     * Create user
+     * Param Request $request
+     * @return collection
+     */
+    public function create($request) {
+        $status = null;
+        if ($request->status) {
+            $status = Carbon::now();
+        }
+
+        $data = [
+            'email' => $request->email,
+            'name' => $request->name,
+            'password' => bcrypt($request->email),
+            'email_verified_at' => $status
+        ];
+
+        return $this->model->create($data);
     }
 
     public function register($request, $token) {

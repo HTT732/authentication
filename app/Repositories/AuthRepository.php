@@ -275,20 +275,24 @@ class AuthRepository extends RepositoryAbstract
      * @return void
      */
     public function register($request, $token) {
-        $exists = $this->checkEmailExists($request->mail);
-        $created_at = Carbon::now();
-        $updated_at = Carbon::now();
+        $exists = $this->checkEmailExists($request->email);
 
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'token' => $token,
-            'password' => bcrypt($request->password),
-            'created_at' => $created_at,
-            'updated_at' => $updated_at
-        ];
         if (!$exists) {
-            return $this->model->create($data);
+            $created_at = Carbon::now();
+            $updated_at = Carbon::now();
+
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'token' => $token,
+                'password' => bcrypt($request->password),
+                'created_at' => $created_at,
+                'updated_at' => $updated_at
+            ];
+            if (!$exists) {
+                return $this->model->create($data);
+            }
         }
+        
     }
 }

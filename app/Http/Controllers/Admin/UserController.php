@@ -59,7 +59,13 @@ class UserController extends AdminController
      */
     public function store(UserRequest $request)
     {
-        dd('d');
+        try {
+            $this->userRepo->create($request);
+        } catch (\Throwable $th) {
+            dd('error');
+        }
+        // create user 
+       
     }
 
     /**
