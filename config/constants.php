@@ -1,4 +1,4 @@
 <?php
 return [
-    'expire' => 1, // Second
+    'expire' => 1, // Minutes
 ];

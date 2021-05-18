@@ -116,17 +116,14 @@ class AuthRepository extends RepositoryAbstract
      */
     public function activeUser($token) {
         $row = $this->model->where('token', $token)->first();
+        $now = Carbon::now();
 
         if (!$row) {
             return 'error';
         }
 
         if (empty($row->email_verified_at)) {
-            $now = Carbon::now();
-            $expire = Config::get('constants.expire');
-
-            $minute = $now->diffInMinutes($row->updated_at);
-            if ($minute < $expire) {
+            if ($this->checkExpireToken($row->updated_at, $now)) {
                 $this->model->where('email', $row->email)
                     ->update(['email_verified_at' => $now]);
                 return 'success';
@@ -136,6 +133,19 @@ class AuthRepository extends RepositoryAbstract
         } else {
             return 'verified';
         }
+    }
+
+    /**
+     * Check time life of token
+     *
+     * Param Token $token
+     * @return boolean
+     */
+    public function checkExpireToken($start, $end) {
+        $expire = Config::get('constants.expire');
+        $minute = $end->diffInMinutes($start);
+
+        return $minute < $expire ? true : false;
     }
 
     /**
@@ -165,8 +175,8 @@ class AuthRepository extends RepositoryAbstract
         if (session('login') && $email) {
             $this->model->where('email', $email)
                         ->update(['remember_token' => null]);
-            
-            // delete cookie 
+
+            // delete cookie
             setcookie('remember_token', '', time()-3600);
 
             // delete session

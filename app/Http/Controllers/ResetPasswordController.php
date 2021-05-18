@@ -6,7 +6,7 @@ use App\Http\Requests\ResetPasswordRequest;
 use App\Repositories\AuthRepository;
 use Illuminate\Http\Request;
 use DB;
-use App\Models\User;
+use Carbon\Carbon;
 
 class ResetPasswordController extends Controller
 {
@@ -30,6 +30,20 @@ class ResetPasswordController extends Controller
 
     public function show($token)
     {
+        $email = $this->authRepo->getEmailByToken($token);
+        $exsist = $this->authRepo->checkEmailExists($email);
+
+        if ($email && $exsist) {
+            $row = $this->authRepo->getData($email);
+            $now = Carbon::now();
+            $updated_at = $row->updated_at;
+            $checkExpire = $this->authRepo->checkExpireToken($updated_at, $now);
+
+            if (!$checkExpire) {
+                return view('auth.password.reset-password', ['expire' => 'Validation time has expired.', 'token' => $token]);
+            }
+        }
+
         return view('auth.password.reset-password', ['token' => $token]);
     }
 
