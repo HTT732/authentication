@@ -12,10 +12,17 @@
   <component name="ChangeListManager">
     <list default="true" id="57664d37-91ef-44e4-a612-637bb094b53c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ResendMailController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ResendMailController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Test.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repositories/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/UserRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/constants.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/constants.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/admin/css/admin-style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/admin/css/admin-style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/lang/en/validation.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/en/validation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/layouts/header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/layouts/header.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/layouts/pagination.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/layouts/pagination.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/user/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/user/create.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/user/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/user/edit.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/user/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/user/index.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,7 +207,8 @@
       <workItem from="1620955768574" duration="22335000" />
       <workItem from="1621215229456" duration="2174000" />
       <workItem from="1621218169270" duration="25505000" />
-      <workItem from="1621301335017" duration="24574000" />
+      <workItem from="1621301335017" duration="24655000" />
+      <workItem from="1621388143804" duration="29481000" />
     </task>
     <servers />
   </component>
@@ -240,10 +248,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="570" y="132" width="770" height="768" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1620719013310" />
-    <state x="666" y="268" width="597" height="560" key="find.popup" timestamp="1621322221480">
+    <state x="666" y="268" width="597" height="560" key="find.popup" timestamp="1621406563235">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="666" y="268" width="597" height="560" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1621322221480" />
+    <state x="666" y="268" width="597" height="560" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1621406563235" />
     <state x="624" y="238" key="run.anything.popup" timestamp="1621240531373">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -252,9 +260,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="623" y="228" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1620891676817" />
-    <state x="685" y="359" width="540" height="315" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1621326903546">
+    <state x="685" y="359" width="540" height="315" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1621410115677">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="685" y="359" width="540" height="315" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1621326903546" />
+    <state x="685" y="359" width="540" height="315" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1621410115677" />
   </component>
 </project>

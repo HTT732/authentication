@@ -19,7 +19,7 @@
                         <td>{{ ++$key }}</td>
                         <td><a href="#"><img src="{{asset('admin/media/users/avatar.jpg')}}" class="avatar" alt="Avatar">{{ $user->name }}</a></td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->created_at }}</td>
+                        <td>{{ $user->created_date }}</td>
                         @if(empty($user->email_verified_at))
                             <td><span class="status text-danger">&bull;</span>
                                 Disable
@@ -42,7 +42,6 @@
             @endif
         </tbody>
     </table>
-
-    @include('admin.layouts.pagination')
+    {{$users->onEachSide(1)->links('admin.layouts.pagination')}}
 @endsection
 @extends('admin.layouts.footer')

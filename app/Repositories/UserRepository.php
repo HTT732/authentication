@@ -36,8 +36,17 @@ class UserRepository extends RepositoryAbstract
      * Param string $table
      * @return collection
      */
-    public function getAllRow() {
-        return $this->model->all();
+    public function getDataPaginate($per_page) {
+        return $this->model->paginate($per_page);
+    }
+
+    /**
+     * Get data by id
+     * Param string $id
+     * @return collection
+     */
+    public function findById($id) {
+        return $this->model->findOrfail($id);
     }
 
     /**
@@ -59,6 +68,30 @@ class UserRepository extends RepositoryAbstract
         ];
 
         return $this->model->create($data);
+    }
+
+    /**
+     * Update user
+     * Param Request $request, Id $id
+     * @return collection
+     */
+    public function update($request, $id) {
+        $user = $this->model->findOrFail($id);
+
+        $user->email = $request->email;
+        $user->name = $request->name;
+
+        if($user->password != $request->password) {
+            $user->password = bcrypt($request->password);
+        }
+
+        if ($request->status) {
+            $user->email_verified_at = Carbon::now();
+        } else {
+            $user->email_verified_at = null;
+        }
+        $user->save();
+        return $user;
     }
 
     public function register($request, $token) {

@@ -160,16 +160,17 @@ table.table .avatar {
     font-size: 13px;
 }
 
-#password {
-    margin-top: 28px;
-}
-
-#password input {
+.password input {
     border-right: 0;
 }
 
-#password span {
+.password span {
     height: 38px;
     border-radius: inherit;
     cursor: pointer;
+}
+
+.disabled{
+    pointer-events:none;
+    background:#e9ecef;
 }

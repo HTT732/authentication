@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Requests\UserRequest;
 use App\Repositories\UserRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use phpDocumentor\Reflection\Types\Object_;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends AdminController
 {
@@ -35,10 +39,14 @@ class UserController extends AdminController
      */
     public function index()
     {
-        $users = $this->userRepo->getAllRow();
-        $per_page = $this->limit;
+        $users = $this->userRepo->getDataPaginate($this->limit);
 
-        return view('admin.user.index', compact('users', 'per_page'));
+        foreach($users as $user) {
+            // add new arrtribute created date
+            $user->created_date = $user->created_at->format('Y-m-d');
+        }
+
+        return view('admin.user.index', compact('users'));
     }
 
     /**
@@ -61,11 +69,14 @@ class UserController extends AdminController
     {
         try {
             $this->userRepo->create($request);
+
+            return back()->with('successMess', trans('messages.create_success', ['name' => 'user']));
         } catch (\Throwable $th) {
-            dd('error');
+            return redirect()->back()->withErrors([
+                    'errorMessage' => trans(
+                'messages.create_failed', ['name' => 'User'])
+                ])->withInput();
         }
-        // create user 
-       
     }
 
     /**
@@ -87,7 +98,13 @@ class UserController extends AdminController
      */
     public function edit($id)
     {
-        //
+        try {
+            $user = $this->userRepo->findById($id);
+
+            return view('admin.user.edit', ['user' => $user]);
+        } catch (ModelNotFoundException $e) {
+            abort(404, trans('messages.not_found_id', ['id' => $id ]));
+        }
     }
 
     /**
@@ -97,9 +114,15 @@ class UserController extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
-        //
+        try {
+            $user = $this->userRepo->update($request, $id);
+
+            return redirect()->view('admin.user.edit', ['user' => $user, 'update_success' => trans('messages.update_success', ['name' => 'User'])]);
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors('errorMessage', trans('messages.update_failed'));
+        }
     }
 
     /**

@@ -2,6 +2,6 @@
 return [
     'expire' => 1, // Minutes
     'backend' => [
-        'per_page' => 20
+        'per_page' => 10
     ]
 ];

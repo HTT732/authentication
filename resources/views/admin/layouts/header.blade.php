@@ -16,24 +16,45 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('#password span').click(function () {
+            $('#passwordCreate span').click(function () {
                 $el = $(this).find('i');
                 if ($el.hasClass('toggle_off')) {
-                    $el.html('&#xe9f6;');
-                    $el.removeClass('toggle_off');
-                    $el.addClass('toogle_on');
-                    $el.css('color', '#299be4');
-                    $('#password input').attr('type', 'text');
+                    toogle_on($el);
+                    $('#passwordCreate input').attr('type', 'text');
                 } else {
-                    console.log('else')
-                    $el.html('&#xe9f5;');
-                    $el.removeClass('toogle_on');
-                    $el.addClass('toggle_off');
-                    $el.css('color', '#000');
-                    $('#password input').attr('type', 'password');
+                    toogle_off($el);
+                    $('#passwordCreate input').attr('type', 'password');
                 }
+            });
 
-            })
+            $('#passwordEdit span').click(function () {
+                $el = $(this).find('i');
+                var pass = $('#inputHidden').val();
+
+                if ($el.hasClass('toggle_off')) {
+
+                    toogle_on($el);
+                    $('#passwordEdit input').removeClass('disabled');
+                } else {
+                    toogle_off($el);
+                    $('#passwordEdit input').val(pass);
+                    $('#passwordEdit input').addClass('disabled');
+                }
+            });
+
+            function toogle_on($el) {
+                $el.html('&#xe9f6;');
+                $el.removeClass('toggle_off');
+                $el.addClass('toogle_on');
+                $el.css('color', '#299be4');
+            }
+
+            function toogle_off($el) {
+                $el.html('&#xe9f5;');
+                $el.removeClass('toogle_on');
+                $el.addClass('toggle_off');
+                $el.css('color', '#000');
+            }
         });
     </script>
 </head>
