@@ -114,6 +114,10 @@
                 });
             })
         });
+
     </script>
+    @push('script')
+        <script src="{{ asset('admin/js/user/index.js') }}"></script>
+    @endpush
 @endsection
 @extends('admin.layouts.footer')
