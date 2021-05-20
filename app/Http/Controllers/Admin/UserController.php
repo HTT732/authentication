@@ -39,12 +39,10 @@ class UserController extends AdminController
      */
     public function index()
     {
-        $users = $this->userRepo->getDataPaginate($this->limit);
+        $result = $this->userRepo->getDataPaginate($this->limit);
 
-        foreach($users as $user) {
-            // add new arrtribute created date
-            $user->created_date = $user->created_at->format('Y-m-d');
-        }
+        // Format created_at from datetime to date
+        $users = $this->userRepo->formatCreateAtDate($result);
 
         return view('admin.user.index', compact('users'));
     }
@@ -117,11 +115,11 @@ class UserController extends AdminController
     public function update(UpdateUserRequest $request, $id)
     {
         try {
-            $user = $this->userRepo->update($request, $id);
+            $this->userRepo->update($request, $id);
+            return redirect()->back()->with(['updateSuccess' => trans('messages.update_success', ['name' => 'User'])]);
 
-            return redirect()->view('admin.user.edit', ['user' => $user, 'update_success' => trans('messages.update_success', ['name' => 'User'])]);
         } catch (\Exception $e) {
-            return back()->withInput()->withErrors('errorMessage', trans('messages.update_failed'));
+            return redirect()->back()->withErrors(['errorMessage' => trans('messages.update_failed', ['name' => 'User'])]);
         }
     }
 
@@ -133,6 +131,33 @@ class UserController extends AdminController
      */
     public function destroy($id)
     {
-        //
+        try {
+            $delete = $this->userRepo->delete($id);
+
+            if ($delete) {
+                return redirect()->back()->with(['successMessage' => trans('messages.delete_success')]);
+            } else {
+                return redirect()->back()->withErrors(['errorMessage' => trans('messages.delete_failed')]);
+            }
+        } catch (ModelNotFoundException $e) {
+            return redirect()->back()->withErrors(['errorMessage'=> trans('messages.not_found_id', ['id' => $id])]);
+        }
+
+    }
+
+    public function searchUser(Request $request) {
+        $result = $this->userRepo->search($request->value)->paginate($this->limit);
+
+        if ($result->count()) {
+            // Format created_at from datetime to date
+            $users = $this->userRepo->formatCreateAtDate($result);
+            $messFound = trans('messages.search_found', ['total' => $users->count() , 'key' => $request->value]);
+
+            return view('admin.user.index', compact('users', 'messFound'))->with(['oldInput' => $request->value]);
+        } else {
+            $messNotFound = trans('messages.search_not_found', ['key' => $request->value]);
+
+            return view('admin.user.index')->with(['users' => $result, 'messNotFound' => $messNotFound, 'oldInput' => $request->value]);
+        }
     }
 }

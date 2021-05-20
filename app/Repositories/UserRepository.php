@@ -94,21 +94,35 @@ class UserRepository extends RepositoryAbstract
         return $user;
     }
 
-    public function register($request, $token) {
-        $exists = $this->checkEmailExists($request->mail);
-        $created_at = Carbon::now();
-        $updated_at = Carbon::now();
+    /**
+     * delete user
+     * Param Id user $id
+     * @return boolean
+     */
+    public function delete($id) {
+        return $this->model->findOrFail($id)->delete();
+    }
 
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'token' => $token,
-            'password' => bcrypt($request->password),
-            'created_at' => $created_at,
-            'updated_at' => $updated_at
-        ];
-        if (!$exists) {
-            return $this->model->create($data);
+    /**
+     * Search user
+     * Param string $search
+     * @return Collection
+     */
+    public function search($value) {
+        $result = $this->model->like('email',trim($value));
+        return $result;
+    }
+
+    /**
+     * Format date time to date
+     * Param Array object $arrayObj, field $field
+     * @return Object
+     */
+    public function formatCreateAtDate($arrayObj) {
+        foreach($arrayObj as $obj) {
+            $obj->created_date = $obj->created_at->format('Y-m-d');
         }
+
+        return $arrayObj;
     }
 }

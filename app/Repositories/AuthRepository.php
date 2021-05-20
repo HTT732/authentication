@@ -42,6 +42,10 @@ class AuthRepository extends RepositoryAbstract
         $password = $request->password;
 
         $user = $this->model->where('email', $email)->first();
+
+        if (!$user)
+            return false;
+
         $active = $user->email_verified_at;
 
         if (!$active) {
@@ -293,6 +297,6 @@ class AuthRepository extends RepositoryAbstract
                 return $this->model->create($data);
             }
         }
-        
+
     }
 }

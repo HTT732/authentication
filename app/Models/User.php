@@ -42,4 +42,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Scope where like
+     *
+     * @return mixed
+     */
+    public function scopeLike($query, $field, $value)
+    {
+        $query->where($field, 'LIKE', "%$value%");
+    }
 }

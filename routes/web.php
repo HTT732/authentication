@@ -35,5 +35,6 @@ Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['prefix' => 'admin'], function () {
     Route::resource('user', UserController::class);
+    Route::get('search', [UserController::class, 'searchUser'])->name('admin.user.search');
 });
 
