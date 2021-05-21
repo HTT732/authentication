@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ForgotPasswordRequest;
+use App\Jobs\SendMail;
 use App\Repositories\AuthRepository;
 use Illuminate\Http\Request;
 use App\Mail\SendMailResetPassword;
@@ -44,8 +45,14 @@ class ForgotPasswordController extends Controller
         $this->authRepo->insertEmailAndToken($request, $token);
 
         // Send mail
-        $this->authRepo->sendMailResetPassword($request, $token);
+        $details=[
+            "email" => $request->email,
+            "token" => $token,
+            "url" => route('reset-password.show', ['reset_password' => $token])
+        ];
 
-        return back()->with('message', 'We have e-mailed your password reset link !');
+        dispatch(new SendMail($details));
+
+        return back()->with('message', trans('messages.email_sended'));
     }
 }

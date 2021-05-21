@@ -40,7 +40,7 @@ class ResetPasswordController extends Controller
             $checkExpire = $this->authRepo->checkExpireToken($created_at, $now);
 
             if (!$checkExpire) {
-                return view('auth.password.reset-password', ['expire' => 'Validation time has expired.', 'token' => $token]);
+                return view('auth.password.reset-password', ['expire' => trans('messages.expire'), 'token' => $token]);
             }
         }
 
@@ -59,9 +59,9 @@ class ResetPasswordController extends Controller
             // Delete token and email
             $this->authRepo->deleteTokenEmail($email);
         } else {
-            return back()->withErrors('Reset password failed!');
+            return back()->withErrors(['reset_failed' => trans('messages.reset_failed')]);
         }
 
-        return redirect('/')->with('message', 'Your password has been changed!');
+        return redirect()->route('login.index')->with('message', trans('messages.has_been_change', ['name' => 'password']));
     }
 }

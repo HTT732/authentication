@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\JobVerifyEmail;
 use Illuminate\Http\Request;
 use App\Repositories\AuthRepository;
 use App\Http\Requests\ForgotPasswordRequest;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class ResendMailController extends Controller
@@ -36,15 +38,20 @@ class ResendMailController extends Controller
 
         // update token to users
         $update = $this->authRepo->updateToken($request->email, $token);
-        $mess = ['verify-fail' => 'Resend mail faild.'];
 
         if (!$update) {
-            return redirect('/resend-email')->withErrors('verify-fail', 'Resend mail faild.');
+            return redirect()->route('resend.index')->withErrors(['verify_fail' => trans('messages.verify_fail')]);
         }
 
         // Verify email
-        $this->authRepo->verifyMailResgiter($request->email, $token);
+        $details = [
+            'email' => $request->email,
+            'url' => route('verify-email', ['token' => $token]),
+            'expire' => Config::get('constants.expire')
+        ];
 
-        return redirect('/login')->with(['message' => 'A link has been sent to your mailbox, open your mailbox to confirm your account.']);
+        dispatch(new JobVerifyEmail($details));
+
+        return redirect()->route('login.index')->with(['message' => trans('messages.link_has_been_sent')]);
     }
 }

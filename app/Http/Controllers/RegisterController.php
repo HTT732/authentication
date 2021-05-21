@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ForgotPasswordRequest;
+use App\Jobs\JobVerifyEmail;
 use App\Repositories\AuthRepository;
 use App\Http\Requests\RegisterRequest;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class RegisterController extends Controller
@@ -37,30 +39,36 @@ class RegisterController extends Controller
 
         if($register) {
             // Verify email
-            $this->authRepo->verifyMailResgiter($request->email, $token);
+            $details = [
+                'email' => $request->email,
+                'url' => route('verify-email', ['token' => $token]),
+                'expire' => Config::get('constants.expire')
+            ];
 
-            return redirect('/login')->with(['message' => 'A link has been sent to your mailbox, open your mailbox to confirm your account.']);
+            dispatch(new JobVerifyEmail($details));
+
+            return redirect()->route('login.index')->with(['message' => trans('messages.link_has_been_sent')]);
         }
-        return back()->with(['message' => 'Account registration failed, please try again!', 'class-color' => 'text-danger']);
+        return back()->with(['message' => trans('messages.register_failed'), 'class-color' => 'text-danger']);
     }
 
     public function verifyRegister($token) {
         $status = $this->authRepo->activeUser($token);
 
         if ($status == false) {
-            return redirect('/login')->with('expire', 'Validation time has expired.');
+            return redirect()->route('login.index')->with('expire', trans('messages.expire'));
         }
 
         if ($status == 'verified') {
-            return redirect('/login')->with('verify-fail', 'Your email has been verified.!');
+            return redirect()->route('login.index')->with('verify-fail', trans('messages.has_been_verified'));
         }
 
         if ($status == 'error') {
-            return redirect('/login')->with('verify-fail', 'Verify error!');
+            return redirect()->route('login.index')->with('verify-fail', 'Verify error!');
         }
 
-        return redirect('/login')->with('message', 'Your email has been verified.!');
+        return redirect()->route('login.index')->with('message', trans('messages.has_been_verified'));
     }
 
-    
+
 }

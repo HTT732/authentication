@@ -2,16 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Jobs\SendMail;
-use App\Jobs\JobVerifyEmail;
 use App\Models\User;
+use App\Models\PasswordReset;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Hash;
 use DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
 use phpDocumentor\Reflection\Types\Collection;
-use Illuminate\Http\Response;
 
 /**
  * Class AuthRepository
@@ -78,41 +75,6 @@ class AuthRepository extends RepositoryAbstract
     }
 
     /**
-     * Send mail reset password
-     *
-     * @return boolean
-     */
-    public function sendMailResetPassword($request, $token) {
-        $url = route('reset-password.show', ['reset_password' => $token]);
-
-        $details=[
-            "email" => $request->email,
-            "token" => $token,
-            "url" => $url
-        ];
-
-        dispatch(new SendMail($details));
-    }
-
-    /**
-     * Send mail reset password
-     *
-     * Param Token $token
-     * @return boolean
-     */
-    public function verifyMailResgiter($email, $token) {
-        $url = route('verify-email', ['token' => $token]);
-
-        $details = [
-            'email' => $email,
-            'url' => $url,
-            'expire' => Config::get('constants.expire')
-        ];
-
-        dispatch(new JobVerifyEmail($details));
-    }
-
-    /**
      * Active user if verified email
      *
      * Param Token $token
@@ -159,7 +121,7 @@ class AuthRepository extends RepositoryAbstract
      * @return boolean
      */
     public function getDataPasswordReset($token) {
-        return DB::table('password_resets')->where('token', $token)->first();
+        return PasswordReset::where('token', $token)->first();
     }
 
     /**
@@ -203,14 +165,14 @@ class AuthRepository extends RepositoryAbstract
     /**
      * Insert email and token to password_resets table
      *
-     * @return boolean
+     * @return Collection
      */
     public function insertEmailAndToken($request, $token) {
-        DB::table('password_resets')->insert([
-            'email'=> $request->email,
-            'token' => $token,
-            'created_at' => Carbon::now()
-        ]);
+        $data = [
+            'email' => $request->email,
+            'token' => $token
+        ];
+        return PasswordReset::insert($data);
     }
 
     /**
@@ -230,7 +192,7 @@ class AuthRepository extends RepositoryAbstract
      * @return string
      */
     public function getEmailByToken($token) {
-        $result = DB::table('password_resets')->where('token', $token)->first();
+        $result = PasswordReset::where('token', $token)->first();
 
         if ($result) {
             return $result->email;
@@ -279,7 +241,7 @@ class AuthRepository extends RepositoryAbstract
      * @return void
      */
     public function deleteTokenEmail($email) {
-        DB::table('password_resets')->where('email', $email)->delete();
+        return PasswordReset::where('email', $email)->delete();
     }
 
     /**
