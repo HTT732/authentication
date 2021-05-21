@@ -34,10 +34,10 @@ class ResetPasswordController extends Controller
         $exsist = $this->authRepo->checkEmailExists($email);
 
         if ($email && $exsist) {
-            $row = $this->authRepo->getData($email);
+            $row = $this->authRepo->getDataPasswordReset($token);
             $now = Carbon::now();
-            $updated_at = $row->updated_at;
-            $checkExpire = $this->authRepo->checkExpireToken($updated_at, $now);
+            $created_at = $row->created_at;
+            $checkExpire = $this->authRepo->checkExpireToken($created_at, $now);
 
             if (!$checkExpire) {
                 return view('auth.password.reset-password', ['expire' => 'Validation time has expired.', 'token' => $token]);

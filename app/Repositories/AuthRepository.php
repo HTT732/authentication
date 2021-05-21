@@ -153,6 +153,16 @@ class AuthRepository extends RepositoryAbstract
     }
 
     /**
+     * Get data from table password-resets
+     *
+     * Param Token $token
+     * @return boolean
+     */
+    public function getDataPasswordReset($token) {
+        return DB::table('password_resets')->where('token', $token)->first();
+    }
+
+    /**
      * Remember login
      *
      * Param null

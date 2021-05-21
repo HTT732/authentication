@@ -22,8 +22,8 @@
         <div id="passwordEdit" class="password  mb-3 col-md-6">
             <label for="inputPassword4" class="form-label">Password</label>
             <div class="input-group">
-                <input id="inputPassword4" type="password" class="form-control disabled" name="password" value="{{$user->password}}">
-                <input type="hidden" id="inputHidden" value="{{$user->password}}">
+                <input id="inputPassword4" type="password" class="form-control disabled" name="password" value="">
+                <input type="hidden" name="validatePassword" value="0">
                 <span class="input-group-text" id="basic-addon1">
                     <i class="material-icons toggle_off">&#xe9f5;</i>
                 </span>

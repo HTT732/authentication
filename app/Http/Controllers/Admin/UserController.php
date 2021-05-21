@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use phpDocumentor\Reflection\Types\Object_;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends AdminController
 {
@@ -39,10 +40,7 @@ class UserController extends AdminController
      */
     public function index()
     {
-        $result = $this->userRepo->getDataPaginate($this->limit);
-
-        // Format created_at from datetime to date
-        $users = $this->userRepo->formatCreateAtDate($result);
+        $users = $this->userRepo->getDataPaginate($this->limit);
 
         return view('admin.user.index', compact('users'));
     }
@@ -85,7 +83,13 @@ class UserController extends AdminController
      */
     public function show($id)
     {
-        //
+        try {
+            $user = $this->userRepo->findById(($id));
+
+            return view('admin.user.show', ['user' => $user]);
+        } catch (ModelNotFoundException $e) {
+            abort(404, trans('messages.not_found_id', ['id' => $id ]));
+        }
     }
 
     /**
@@ -115,6 +119,16 @@ class UserController extends AdminController
     public function update(UpdateUserRequest $request, $id)
     {
         try {
+            if ($request->validatePassword) {
+                $validator = Validator::make($request->all(), [
+                    'password' => 'required|min:6'
+                ]);
+
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput();
+                }
+            }
+
             $this->userRepo->update($request, $id);
             return redirect()->back()->with(['updateSuccess' => trans('messages.update_success', ['name' => 'User'])]);
 
@@ -146,18 +160,16 @@ class UserController extends AdminController
     }
 
     public function searchUser(Request $request) {
-        $result = $this->userRepo->search($request->value)->paginate($this->limit);
+        $users = $this->userRepo->search($request->value)->paginate($this->limit);
 
-        if ($result->count()) {
-            // Format created_at from datetime to date
-            $users = $this->userRepo->formatCreateAtDate($result);
+        if ($users->count()) {
             $messFound = trans('messages.search_found', ['total' => $users->count() , 'key' => $request->value]);
 
             return view('admin.user.index', compact('users', 'messFound'))->with(['oldInput' => $request->value]);
         } else {
             $messNotFound = trans('messages.search_not_found', ['key' => $request->value]);
 
-            return view('admin.user.index')->with(['users' => $result, 'messNotFound' => $messNotFound, 'oldInput' => $request->value]);
+            return view('admin.user.index')->with(['users' => $users, 'messNotFound' => $messNotFound, 'oldInput' => $request->value]);
         }
     }
 }

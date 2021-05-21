@@ -81,7 +81,7 @@ class UserRepository extends RepositoryAbstract
         $user->email = $request->email;
         $user->name = $request->name;
 
-        if($user->password != $request->password) {
+        if(trim($user->password) != '') {
             $user->password = bcrypt($request->password);
         }
 
@@ -111,18 +111,5 @@ class UserRepository extends RepositoryAbstract
     public function search($value) {
         $result = $this->model->like('email',trim($value));
         return $result;
-    }
-
-    /**
-     * Format date time to date
-     * Param Array object $arrayObj, field $field
-     * @return Object
-     */
-    public function formatCreateAtDate($arrayObj) {
-        foreach($arrayObj as $obj) {
-            $obj->created_date = $obj->created_at->format('Y-m-d');
-        }
-
-        return $arrayObj;
     }
 }

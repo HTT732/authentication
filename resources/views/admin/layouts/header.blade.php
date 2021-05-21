@@ -31,16 +31,16 @@
 
             $('#passwordEdit span').click(function () {
                 $el = $(this).find('i');
-                var pass = $('#inputHidden').val();
 
                 if ($el.hasClass('toggle_off')) {
-
                     toogle_on($el);
                     $('#passwordEdit input').removeClass('disabled');
+                    $('#passwordEdit input[name="validatePassword"]').val('1');
                 } else {
                     toogle_off($el);
-                    $('#passwordEdit input').val(pass);
+                    $('#passwordEdit input').val('');
                     $('#passwordEdit input').addClass('disabled');
+                    $('#passwordEdit input[name="validatePassword"]').val('0');
                 }
             });
 
@@ -71,6 +71,9 @@
                         <h2><b>@yield('title')</b></h2>
                     </div>
                     <div class="col-sm-7">
+                        @if(session('login'))
+                            <a href="{{ route('logout') }}" class="btn btn-secondary"><i class="material-icons logout">&#xe9ba;</i> <span>Logout</span></a>
+                        @endif
                         <a href="{{ route('user.create') }}" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
                     </div>
                 </div>

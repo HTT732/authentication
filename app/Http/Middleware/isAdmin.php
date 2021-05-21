@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class VerifyLogin
+class isAdmin
 {
     /**
      * Handle an incoming request.
@@ -16,8 +16,8 @@ class VerifyLogin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (session('login')) {
-            return redirect()->route('home');
+        if (!session('login')) {
+            return redirect()->route('login.index');
         }
         return $next($request);
     }

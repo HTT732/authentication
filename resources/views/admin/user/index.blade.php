@@ -45,9 +45,9 @@
                 @foreach($users as $key => $user)
                     <tr>
                         <td>{{ ++$key }}</td>
-                        <td><a href="#"><img src="{{asset('admin/media/users/avatar.jpg')}}" class="avatar" alt="Avatar">{{ $user->name }}</a></td>
+                        <td><a href="{{route('user.show', ['user' => $user->id])}}"><img src="{{asset('admin/media/users/avatar.jpg')}}" class="avatar" alt="Avatar">{{ $user->name }}</a></td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->created_date }}</td>
+                        <td>{{ date('Y-m-d', strtotime($user->created_at)) }}</td>
                         @if(empty($user->email_verified_at))
                             <td><span class="status text-danger">&bull;</span>
                                 Disable

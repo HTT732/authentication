@@ -19,12 +19,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function (Request $request) {
+Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
 Route::middleware('verify.login')->group(function () {
-    Route::resource('login', LoginController::class)->only(['index', 'store']);
+    Route::resource('login', LoginController::class);
     Route::resource('register', RegisterController::class)->only(['index', 'store']);
     Route::resource('forgot-password', ForgotPasswordController::class)->only(['index', 'store']);
     Route::resource('reset-password', ResetPasswordController::class)->only(['show', 'store']);
@@ -33,7 +33,7 @@ Route::middleware('verify.login')->group(function () {
 });
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['middleware' => 'isAdmin', 'prefix' => 'admin'],function () {
     Route::resource('user', UserController::class);
     Route::get('search', [UserController::class, 'searchUser'])->name('admin.user.search');
 });
