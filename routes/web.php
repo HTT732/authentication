@@ -7,7 +7,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ResendMailController;
 use App\Http\Controllers\Admin\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\NotificationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,3 +38,29 @@ Route::group(['middleware' => 'isAdmin', 'prefix' => 'admin'],function () {
     Route::get('search', [UserController::class, 'searchUser'])->name('admin.user.search');
 });
 
+// Send message to user
+Route::post('send-message-to-user', [NotificationController::class, 'sendMessageToUser'])->name('send-message');
+
+Route::get('sms', function () {
+    $basic  = new \Vonage\Client\Credentials\Basic("a659b762", "jSSoFf9u91wXZDvR");
+    $client = new \Vonage\Client($basic);
+
+    $verification = $client->verify()->start([
+        'number' => '+84789109732',
+        'brand'  => 'My App',
+    ]);
+
+    // cancel verify by sms
+    $client->verify()->cancel($verification);
+//    $response = $client->sms()->send(
+//        new \Vonage\SMS\Message\SMS("84789109732", '84932556770', 'A text message sent using the Nexmo SMS API')
+//    );
+//
+//    $message = $response->current();
+return $verification->getRequestId();
+//    if ($message->getStatus() == 0) {
+//        echo "The message was sent successfully\n";
+//    } else {
+//        echo "The message failed with status: " . $message->getStatus() . "\n";
+//    }
+});

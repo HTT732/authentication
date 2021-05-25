@@ -70,7 +70,7 @@ class LoginController extends Controller
     public function logout()
     {
         if (session('login')) {
-            $this->authRepo->updateRememberToken(null);
+            $this->authRepo->updateRememberToken(session('email'), null);
 
             // delete cookie
             setcookie('remember_token', '', time()-3600);

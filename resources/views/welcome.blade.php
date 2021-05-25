@@ -22,3 +22,26 @@
         </form>
     @endif
 @endsection
+@section('content2')
+    <div class="col-12" style="margin-top:30%">
+        <h3 style="color:#fff">Send message to user</h3>
+        @if(count($errors) > 0)
+            <div class="alert alert-danger w-50 mt-3" role="alert">
+                @foreach($errors->all() as $err)k
+                    <li>{{$err}}</li>
+                @endforeach
+            </div>
+        @endif
+        <form action="{{route('send-message')}}" method="post" class="mt-4">
+            @csrf
+            <label for="" class="text-success text-bold mr-2"><strong>Email</strong> </label><input type="text" name="email">
+            <label for="" class="text-success text-bold mr-2 ml-4"><strong>Message</strong> </label><input type="text" name="mess">
+            <input type="submit" value="Send">
+        </form>
+        @if(session('success'))
+            <div class="alert alert-success w-25 mt-3" role="alert">
+                {{session('success')}}
+            </div>
+        @endif
+    </div>
+@endsection

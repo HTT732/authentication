@@ -18,6 +18,7 @@ return [
     'has_been_change' => 'Your :name has been changed!',
     'register_failed' => 'Account registration failed, please try again!',
     'has_been_verified' => 'Your email has been verified.!',
-    'incorrect_email_pass' => 'Incorrect password or email!'
+    'incorrect_email_pass' => 'Incorrect password or email!',
+    'has_been_send' => 'Message has been sent!'
 ];
 ?>
