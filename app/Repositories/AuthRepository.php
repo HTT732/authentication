@@ -6,8 +6,6 @@ use App\Models\User;
 use App\Models\PasswordReset;
 use Carbon\Carbon;
 use DB;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Config;
 
 /**
  * Class AuthRepository
