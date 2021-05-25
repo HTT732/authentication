@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ForgotPasswordRequest;
 use App\Jobs\JobVerifyEmail;
 use App\Repositories\AuthRepository;
 use App\Http\Requests\RegisterRequest;
@@ -59,11 +58,11 @@ class RegisterController extends Controller
             return redirect()->route('login.index')->with('expire', trans('messages.expire'));
         }
 
-        if ($status == 'verified') {
+        if ($status == config('constants.VERIFIED')) {
             return redirect()->route('login.index')->with('verify-fail', trans('messages.has_been_verified'));
         }
 
-        if ($status == 'error') {
+        if ($status == config('constants.ERROR')) {
             return redirect()->route('login.index')->with('verify-fail', 'Verify error!');
         }
 

@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\JobVerifyEmail;
-use Illuminate\Http\Request;
 use App\Repositories\AuthRepository;
 use App\Http\Requests\ForgotPasswordRequest;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class ResendMailController extends Controller
@@ -47,7 +45,7 @@ class ResendMailController extends Controller
         $details = [
             'email' => $request->email,
             'url' => route('verify-email', ['token' => $token]),
-            'expire' => Config::get('constants.expire')
+            'expire' => config('constants.expire')
         ];
 
         dispatch(new JobVerifyEmail($details));

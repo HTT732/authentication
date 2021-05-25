@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ForgotPasswordRequest;
-use App\Jobs\SendMail;
+use App\Jobs\ResetPasswordEmail;
 use App\Repositories\AuthRepository;
-use Illuminate\Http\Request;
-use App\Mail\SendMailResetPassword;
 use DB;
-use Carbon\Carbon;
 use Mail;
 use Illuminate\Support\Str;
 
@@ -51,7 +48,7 @@ class ForgotPasswordController extends Controller
             "url" => route('reset-password.show', ['reset_password' => $token])
         ];
 
-        dispatch(new SendMail($details));
+        dispatch(new ResetPasswordEmail($details));
 
         return back()->with('message', trans('messages.email_sended'));
     }

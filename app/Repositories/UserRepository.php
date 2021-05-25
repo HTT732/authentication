@@ -2,17 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Jobs\SendMail;
-use App\Jobs\JobVerifyEmail;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Hash;
 use DB;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Config;
 use phpDocumentor\Reflection\Types\Collection;
-use Illuminate\Http\Response;
-// use App\Http\Repositories\AuthRepository;
 
 /**
  * Class AuthRepository
@@ -24,7 +17,7 @@ class UserRepository extends RepositoryAbstract
     /**
      * Get model name
      *
-     * @return string
+     * @return Model
      */
     public function getModel()
     {
@@ -32,27 +25,9 @@ class UserRepository extends RepositoryAbstract
     }
 
     /**
-     * Get all data from users table
-     * Param string $table
-     * @return collection
-     */
-    public function getDataPaginate($per_page) {
-        return $this->model->paginate($per_page);
-    }
-
-    /**
-     * Get data by id
-     * Param string $id
-     * @return collection
-     */
-    public function findById($id) {
-        return $this->model->findOrfail($id);
-    }
-
-    /**
      * Create user
-     * Param Request $request
-     * @return collection
+     * @param $request
+     * @return boolean
      */
     public function create($request) {
         $status = null;
@@ -72,18 +47,16 @@ class UserRepository extends RepositoryAbstract
 
     /**
      * Update user
-     * Param Request $request, Id $id
-     * @return collection
+     * @param $request
+     * @param $id
+     * @return Object $user
      */
     public function update($request, $id) {
         $user = $this->model->findOrFail($id);
 
         $user->email = $request->email;
         $user->name = $request->name;
-
-        if(trim($user->password) != '') {
-            $user->password = bcrypt($request->password);
-        }
+        $user->password = bcrypt($request->password);
 
         if ($request->status) {
             $user->email_verified_at = Carbon::now();
@@ -95,21 +68,11 @@ class UserRepository extends RepositoryAbstract
     }
 
     /**
-     * delete user
-     * Param Id user $id
-     * @return boolean
-     */
-    public function delete($id) {
-        return $this->model->findOrFail($id)->delete();
-    }
-
-    /**
      * Search user
-     * Param string $search
+     * @param string $value
      * @return Collection
      */
     public function search($value) {
-        $result = $this->model->like('email',trim($value));
-        return $result;
+        return $this->model->like('email',trim($value));
     }
 }

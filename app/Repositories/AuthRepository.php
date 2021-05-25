@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
-use phpDocumentor\Reflection\Types\Collection;
 
 /**
  * Class AuthRepository
@@ -20,7 +19,7 @@ class AuthRepository extends RepositoryAbstract
     /**
      * Get model name
      *
-     * @return string
+     * @return Model
      */
     public function getModel()
     {
@@ -30,13 +29,14 @@ class AuthRepository extends RepositoryAbstract
     /**
      * Login
      *
-     * @param  String  $request
+     * @param  Object  $request
      * @return boolean
      */
     public function login($request)
     {
         $email = $request->email;
         $password = $request->password;
+        $pass = false;
 
         $user = $this->model->where('email', $email)->first();
 
@@ -44,9 +44,8 @@ class AuthRepository extends RepositoryAbstract
             return false;
 
         $active = $user->email_verified_at;
-
         if (!$active) {
-            return 'inactive';
+            return config('constants.INACTIVE');
         }
 
         if ($user) {
@@ -54,30 +53,15 @@ class AuthRepository extends RepositoryAbstract
         }
 
         if ($user && $pass) {
-            session()->put('login', true);
-            session()->put('user_id', $user->id);
-            session()->put('name', $user->name);
-
-            return 'success';
+            return config('constants.LOGIN_SUCCESS');
         }
         return false;
     }
 
     /**
-     * Login
-     *
-     * @return boolean
-     */
-    public function logout() {
-        session()->forget(['login', 'user_id']);
-
-        return true;
-    }
-
-    /**
      * Active user if verified email
      *
-     * Param Token $token
+     * @param $token
      * @return boolean
      */
     public function activeUser($token) {
@@ -85,39 +69,38 @@ class AuthRepository extends RepositoryAbstract
         $now = Carbon::now();
 
         if (!$row) {
-            return 'error';
+            return config('constants.ERROR');
         }
 
         if (empty($row->email_verified_at)) {
             if ($this->checkExpireToken($row->updated_at, $now)) {
                 $this->model->where('email', $row->email)
                     ->update(['email_verified_at' => $now]);
-                return 'success';
-            } else {
-                return false;
+                return config('constants.LOGIN_SUCCESS');
             }
-        } else {
-            return 'verified';
+            return false;
         }
+        return config('constants.VERIFIED');
     }
 
     /**
      * Check time life of token
      *
-     * Param Token $token
+     * @param Date $start
+     * @param Date $end
      * @return boolean
      */
     public function checkExpireToken($start, $end) {
-        $expire = Config::get('constants.expire');
+        $expire = config('constants.expire');
         $minute = $end->diffInMinutes($start);
 
-        return $minute < $expire ? true : false;
+        return $minute < $expire;
     }
 
     /**
      * Get data from table password-resets
      *
-     * Param Token $token
+     * @param string $token
      * @return boolean
      */
     public function getDataPasswordReset($token) {
@@ -127,45 +110,20 @@ class AuthRepository extends RepositoryAbstract
     /**
      * Remember login
      *
-     * Param null
+     * @param Object $request
      * @return void
      */
-    public function rememberLogin($request) {
-        $token = Str::random(64);
-
-        $this->model->where('email', $request->email)
+    public function rememberLogin($request, $token) {
+        return $this->model->where('email', $request->email)
                     ->update(['remember_token' => $token]);
-
-        // create cookie remember
-        setcookie("remember_token", $token, (time()+3600*24*365));
-    }
-
-    /**
-     * Forget login
-     *
-     * Param null
-     * @return void
-     */
-    public function forgetLogin() {
-        $email = session('email');
-        if (session('login') && $email) {
-            $this->model->where('email', $email)
-                        ->update(['remember_token' => null]);
-
-            // delete cookie
-            setcookie('remember_token', '', time()-3600);
-
-            // delete session
-            session()->forget('login');
-            session()->forget('email');
-            session()->forget('name');
-        }
     }
 
     /**
      * Insert email and token to password_resets table
      *
-     * @return Collection
+     * @param Object $request
+     * @param String $token
+     * @return boolean
      */
     public function insertEmailAndToken($request, $token) {
         $data = [
@@ -189,7 +147,7 @@ class AuthRepository extends RepositoryAbstract
      * Check email exists by token
      *
      * @param  string  $token
-     * @return string
+     * @return boolean
      */
     public function getEmailByToken($token) {
         $result = PasswordReset::where('token', $token)->first();
@@ -197,40 +155,52 @@ class AuthRepository extends RepositoryAbstract
         if ($result) {
             return $result->email;
         }
+        return false;
     }
 
     /**
      * Get data from users by email
      *
-     * @param  string  $token
-     * @return string
+     * @param string $email
+     * @return boolean
      */
     public function getData($email) {
-        $result = $this->model->where('email', $email)->first();
-
-        return $result;
+        return $this->model->where('email', $email)->first();
     }
 
     /**
      * Update token
      *
-     * @param  string  $token
-     * @return Collection
+     * @param string $email
+     * @param string $token
+     * @return boolean
      */
     function updateToken($email, $token) {
-        $update = $this->model->where('email', $email)
+        return $this->model->where('email', $email)
                     ->update(['token' => $token]);
-        return $update;
+    }
+
+    /**
+     * Update remember_token
+     *
+     * @param string $email
+     * @param string $token
+     * @return boolean
+     */
+    function updateRememberToken($email, $token) {
+        return $this->model->where('email', $email)
+            ->update(['remember_token' => $token]);
     }
 
     /**
      * Check email exists by token
      *
-     * @param  string  $email
-     * @return void
+     * @param string $email
+     * @param string $password
+     * @return boolean
      */
     public function updatePassword($email, $password) {
-        $this->model->where('email', $email)
+        return $this->model->where('email', $email)
                     ->update(['password' => bcrypt($password)]);
     }
 
@@ -248,7 +218,7 @@ class AuthRepository extends RepositoryAbstract
      * Register use
      *
      * @param  $request
-     * @return void
+     * @return boolean
      */
     public function register($request, $token) {
         $exists = $this->checkEmailExists($request->email);
@@ -269,6 +239,6 @@ class AuthRepository extends RepositoryAbstract
                 return $this->model->create($data);
             }
         }
-
+        return false;
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace App\Repositories;
 
-use Illuminate\Support\Arr;
 
 /**
  * Abstract Respository
@@ -10,7 +9,6 @@ use Illuminate\Support\Arr;
  */
 abstract class RepositoryAbstract
 {
-
     /**
      * Global variable model
      */
@@ -18,8 +16,6 @@ abstract class RepositoryAbstract
 
     /**
      * Function construct
-     *
-     * @param $_model
      */
     public function __construct()
     {
@@ -40,5 +36,32 @@ abstract class RepositoryAbstract
         $this->model = app()->make(
             $this->getModel()
         );
+    }
+
+    /**
+     * delete user
+     * @param $id
+     * @return boolean
+     */
+    public function delete($id) {
+        return $this->model->findOrFail($id)->delete();
+    }
+
+    /**
+     * Get data by id
+     * @param $id
+     * @return boolean
+     */
+    public function findById($id) {
+        return $this->model->findOrfail($id);
+    }
+
+    /**
+     * Get all data from users table
+     * @param integer $per_page
+     * @return boolean
+     */
+    public function getDataPaginate($per_page) {
+        return $this->model->paginate($per_page);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ResetPasswordRequest;
 use App\Repositories\AuthRepository;
-use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
 
