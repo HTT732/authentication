@@ -34,12 +34,18 @@ class LoginController extends Controller
     public function store(LoginRequest $request)
     {
         $token = Str::random(64);
-        $login = $this->authRepo->login($request, $token);
+        $user = $this->authRepo->login($request, $token);
+
+        // account inactive
+        if ($user == config('constants.INACTIVE')) {
+            return redirect()->route('login.index')->with('not-found-link', trans('messages.inactive'));
+        }
 
         // login success
-        if ($login == config('constants.LOGIN_SUCCESS')) {
+        if ($user) {
             session()->put('login', true);
-            session()->put('name', $request->name);
+            session()->put('name', $user->name);
+            session()->put('email', $user->email);
 
             // remember login
             if ($request->has('remember')) {
@@ -48,13 +54,7 @@ class LoginController extends Controller
                 // create cookie remember
                 setcookie("remember_token", $token, (time()+3600*24*365));
             }
-
             return redirect()->route('home');
-        }
-
-        // account inactive
-        if ($login == config('constants.INACTIVE')) {
-            return redirect()->route('login.index')->with('not-found-link', trans('messages.inactive'));
         }
 
         //incorrect password or email

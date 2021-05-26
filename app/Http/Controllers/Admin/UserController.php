@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\CreateAccount;
 use App\Http\Requests\UserRequest;
+use App\Notifications\SendAccountCreatedToUser;
+use App\Repositories\AuthRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Validator;
+use Str;
 
 class UserController extends AdminController
 {
@@ -17,17 +21,19 @@ class UserController extends AdminController
      * @var object
      */
     protected $userRepo;
+    protected $authRepo;
 
     /**
      * Construct
      *
      * @param UserRepository $userRepository
-     * @return void
+     * @param AuthRepository $authRepo
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, AuthRepository $authRepo)
     {
         parent::__construct();
         $this->userRepo = $userRepository;
+        $this->authRepo = $authRepo;
     }
 
     /**
@@ -61,7 +67,21 @@ class UserController extends AdminController
     public function store(UserRequest $request)
     {
         try {
-            $this->userRepo->create($request);
+            $user = $this->userRepo->create($request);
+            $admin = [
+                'name' => session('name'),
+                'email' => session('email')
+            ];
+
+            $token = Str::random(64);
+            $this->authRepo->insertEmailAndToken($request, $token);
+            $urlResetPassword = route('reset-password.show', ['reset_password'=> $token]);
+
+            //  Send mail to admin
+            event(new CreateAccount($admin, $user));
+
+            // Send mail to user
+            $user->notify(new SendAccountCreatedToUser($urlResetPassword));
 
             return back()->with('successMess', trans('messages.create_success', ['name' => 'user']));
         } catch (\Throwable $th) {

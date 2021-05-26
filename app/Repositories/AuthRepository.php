@@ -51,7 +51,7 @@ class AuthRepository extends RepositoryAbstract
         }
 
         if ($user && $pass) {
-            return config('constants.LOGIN_SUCCESS');
+            return $user;
         }
         return false;
     }
