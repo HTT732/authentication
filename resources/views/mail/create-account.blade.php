@@ -1,24 +1,14 @@
 @component('mail::message')
-
-    # Thank you!
+    #Hello, {{$admin['name']}}!
 
     Have a newly created account.
-
-    @component('mail::table')
-
-        |Email            |Name               |Status           |Date         |
-        |-----------------|-------------------|-----------------|-------------|
-        |{{$user->email}} |{{$user->name}}    |{{empty($user->email_verified_at) ? 'Inactive' : 'Active'}}|{{$user->created_at}}|
-
-    @endcomponent
-
-    @component('mail::button', ['url' => 'hhttp://localhost:8089/admin/user', 'color' => 'yellow'])
-        Track you shipping
-    @endcomponent
+    Name  : {{$user->name}}
+    Email : {{$user->email}}
+    Status: {{empty($user->email_verified_at) ? 'Inactive' : 'Active'}}
+    Date  : {{$user->created_at}}
 
     Regards,
     {{ config('app.name') }}
-
 @endcomponent
 
 

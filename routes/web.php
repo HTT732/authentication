@@ -8,6 +8,7 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ResendMailController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\NotificationController;
+use Illuminate\Support\Facades\View;
 /*
 |--------------------------------------------------------------------------
 | Web Routes

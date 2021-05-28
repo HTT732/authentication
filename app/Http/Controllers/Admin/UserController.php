@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Validator;
 use Str;
+use Illuminate\Support\Facades\View;
 
 class UserController extends AdminController
 {
